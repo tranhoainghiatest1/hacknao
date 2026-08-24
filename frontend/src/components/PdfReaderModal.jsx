@@ -7,11 +7,34 @@ const PAGE_OPTIONS = [
   { value: 11, label: 'Trang 11 - Unit 1: Truyện chêm' },
   { value: 14, label: 'Trang 14 - Unit 1: Từ vựng 01-04' },
   { value: 15, label: 'Trang 15 - Unit 1: Từ vựng 05-10' },
-  { value: 26, label: 'Trang 26 - Unit 2: Từ vựng 11-16' },
-  { value: 34, label: 'Trang 34 - Unit 3: Từ vựng 17-20' },
-  { value: 48, label: 'Trang 48 - Unit 4: Từ vựng 21-25' },
-  { value: 62, label: 'Trang 62 - Unit 5: Từ vựng 26-30' },
-  { value: 75, label: 'Trang 75 - Unit 6: Từ vựng 31-34' }
+  { value: 20, label: 'Trang 20 - Unit 1: Tổng kết từ vựng' },
+  { value: 21, label: 'Trang 21 - Unit 2: Truyện chêm' },
+  { value: 24, label: 'Trang 24 - Unit 2: Từ vựng 01-04' },
+  { value: 30, label: 'Trang 30 - Unit 2: Tổng kết từ vựng' },
+  { value: 31, label: 'Trang 31 - Unit 3: Truyện chêm' },
+  { value: 34, label: 'Trang 34 - Unit 3: Từ vựng 01-05' },
+  { value: 40, label: 'Trang 40 - Unit 3: Tổng kết từ vựng' },
+  { value: 41, label: 'Trang 41 - Unit 4: Truyện chêm' },
+  { value: 44, label: 'Trang 44 - Unit 4: Từ vựng 01-05' },
+  { value: 50, label: 'Trang 50 - Unit 4: Tổng kết từ vựng' },
+  { value: 51, label: 'Trang 51 - Unit 5: Truyện chêm' },
+  { value: 53, label: 'Trang 53 - Unit 5: Từ vựng 01-04' },
+  { value: 59, label: 'Trang 59 - Unit 5: Tổng kết từ vựng' },
+  { value: 60, label: 'Trang 60 - Unit 6: Truyện chêm' },
+  { value: 62, label: 'Trang 62 - Unit 6: Từ vựng 01-04' },
+  { value: 68, label: 'Trang 68 - Unit 6: Tổng kết từ vựng' },
+  { value: 69, label: 'Trang 69 - Unit 7: Truyện chêm' },
+  { value: 71, label: 'Trang 71 - Unit 7: Từ vựng 01-05' },
+  { value: 76, label: 'Trang 76 - Unit 7: Tổng kết từ vựng' },
+  { value: 77, label: 'Trang 77 - Unit 8: Truyện chêm' },
+  { value: 79, label: 'Trang 79 - Unit 8: Từ vựng 01-05' },
+  { value: 86, label: 'Trang 86 - Unit 8: Tổng kết từ vựng' },
+  { value: 87, label: 'Trang 87 - Unit 9: Truyện chêm' },
+  { value: 89, label: 'Trang 89 - Unit 9: Từ vựng 01-05' },
+  { value: 95, label: 'Trang 95 - Unit 9: Tổng kết từ vựng' },
+  { value: 96, label: 'Trang 96 - Unit 10: Truyện chêm' },
+  { value: 98, label: 'Trang 98 - Unit 10: Từ vựng 01-05' },
+  { value: 105, label: 'Trang 105 - Unit 10: Tổng kết từ vựng' }
 ];
 
 export function PdfReaderModal({ isOpen, pageNumber = 14, onClose }) {
@@ -34,15 +57,15 @@ export function PdfReaderModal({ isOpen, pageNumber = 14, onClose }) {
   if (!isOpen) return null;
 
   const handlePrev = () => {
-    const pages = PAGE_OPTIONS.map((p) => p.value);
-    const idx = pages.indexOf(currentPage);
-    if (idx > 0) setCurrentPage(pages[idx - 1]);
+    if (currentPage > 1) {
+      setCurrentPage((p) => p - 1);
+    }
   };
 
   const handleNext = () => {
-    const pages = PAGE_OPTIONS.map((p) => p.value);
-    const idx = pages.indexOf(currentPage);
-    if (idx < pages.length - 1) setCurrentPage(pages[idx + 1]);
+    if (currentPage < 105) {
+      setCurrentPage((p) => p + 1);
+    }
   };
 
   return (
@@ -51,7 +74,7 @@ export function PdfReaderModal({ isOpen, pageNumber = 14, onClose }) {
         <div className="modal-header">
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
             <h3 className="modal-title"><BookOpen size={20} /> Sách Hack Não 1500 Từ Tiếng Anh</h3>
-            <span className="badge badge-unit">Trang {currentPage}</span>
+            <span className="badge badge-unit">Trang {currentPage} / 105</span>
           </div>
           <button className="modal-close-btn" onClick={onClose} aria-label="Đóng cửa sổ">
             <X size={20} />
@@ -71,13 +94,16 @@ export function PdfReaderModal({ isOpen, pageNumber = 14, onClose }) {
         </div>
 
         <div className="modal-footer">
-          <div className="select-wrapper">
-            <label>Chọn trang:</label>
+          <div className="select-wrapper" style={{ flex: 1 }}>
+            <label style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>Mục lục nhanh:</label>
             <select
-              value={currentPage}
-              onChange={(e) => setCurrentPage(parseInt(e.target.value, 10))}
+              value={PAGE_OPTIONS.some((o) => o.value === currentPage) ? currentPage : ''}
+              onChange={(e) => {
+                if (e.target.value) setCurrentPage(parseInt(e.target.value, 10));
+              }}
               aria-label="Chọn trang sách PDF"
             >
+              <option value="">-- Chọn mốc Unit / Trang --</option>
               {PAGE_OPTIONS.map((opt) => (
                 <option key={opt.value} value={opt.value}>
                   {opt.label}
@@ -86,11 +112,14 @@ export function PdfReaderModal({ isOpen, pageNumber = 14, onClose }) {
             </select>
           </div>
 
-          <div style={{ display: 'flex', gap: 8 }}>
-            <button className="btn btn-outline" onClick={handlePrev}>
+          <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+            <button className="btn btn-outline" onClick={handlePrev} disabled={currentPage <= 1}>
               <ChevronLeft size={16} /> Trang trước
             </button>
-            <button className="btn btn-outline" onClick={handleNext}>
+            <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', fontWeight: 600, minWidth: 60, textAlign: 'center' }}>
+              Trang {currentPage}
+            </span>
+            <button className="btn btn-outline" onClick={handleNext} disabled={currentPage >= 105}>
               Trang kế <ChevronRight size={16} />
             </button>
           </div>
