@@ -1,22 +1,22 @@
 {
-  "name": "hacknao-1500-crud",
-  "version": "1.0.0",
-  "description": "Hệ thống Quản lý & Học Từ Vựng Hack Não 1500 Tiếng Anh - CRUD & Search kết nối MySQL (XAMPP)",
-  "main": "server.js",
+  "name": "hacknao-1500",
+  "version": "2.0.0",
+  "description": "Hệ thống Quản lý & Học Từ Vựng Hack Não 1500 - Monorepo (Backend: Node.js Express MySQL + Frontend: React 19 Vite)",
+  "type": "module",
   "scripts": {
-    "start": "node server.js",
-    "dev": "node --watch server.js",
-    "db:init": "node scripts/init-db.js",
-    "db:seed": "node scripts/seed-db.js"
+    "dev": "concurrently --kill-others-on-fail \"npm run dev --prefix backend\" \"npm run dev --prefix frontend\"",
+    "start": "concurrently --kill-others-on-fail \"npm start --prefix backend\" \"npm run dev --prefix frontend\"",
+    "dev:backend": "npm run dev --prefix backend",
+    "dev:frontend": "npm run dev --prefix frontend",
+    "build": "npm run build --prefix frontend",
+    "db:init": "npm run db:init --prefix backend",
+    "db:seed": "npm run db:seed --prefix backend",
+    "install:all": "npm install && npm install --prefix backend && npm install --prefix frontend"
   },
-  "keywords": ["hacknao", "crud", "mysql", "xampp", "vocabulary", "english"],
+  "keywords": ["hacknao", "react19", "vite", "express", "mysql", "xampp", "vocabulary"],
   "author": "Antigravity",
   "license": "ISC",
-  "dependencies": {
-    "cors": "^2.8.5",
-    "dotenv": "^16.4.7",
-    "express": "^4.21.2",
-    "multer": "^1.4.5-lts.1",
-    "mysql2": "^3.12.0"
+  "devDependencies": {
+    "concurrently": "^9.1.2"
   }
 }

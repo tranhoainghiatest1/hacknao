@@ -1,45 +1,65 @@
-# Hack Não 1500 Từ Vựng Tiếng Anh - Full-Stack CRUD & Flashcard Web App
+# 🧠 HACK NÃO 1500 - FULLSTACK CRUD (REACT 19 + EXPRESS + MYSQL XAMPP)
 
-Ứng dụng Web Quản lý & Học Từ Vựng Hack Não 1500 Tiếng Anh với giao diện hiện đại, tính năng CRUD đầy đủ, âm thanh phát âm, Flashcard 3D, Quiz luyện tập và thống kê học tập.
+Hệ thống quản lý và học từ vựng tiếng Anh theo phương pháp **Hack Não 1500** (Âm thanh tương tự, Flashcard 3D, Trắc nghiệm Quiz, Sách PDF, Phát âm Web Speech API bản xứ).
 
-## 🚀 Công nghệ sử dụng
-- **Backend**: Node.js, Express.js
-- **Database**: MySQL (XAMPP / Standalone) với thư viện `mysql2/promise`
-- **Frontend**: HTML5, CSS3 (Glassmorphism & Neumorphism, Responsive), Vanilla JavaScript
-- **API**: RESTful API CRUD + Phát âm Web Speech API / Từ điển
+---
 
-## 📦 Cài đặt và Chạy dự án
+## 📁 Cấu Trúc Dự Án
 
-1. **Cài đặt dependencies**:
-   ```bash
-   npm install
-   ```
+```
+f:\hacknao\
+├── backend/                  # REST API Express + MySQL (XAMPP)
+│   ├── .env                  # Cấu hình MySQL & Port 5000
+│   ├── config/               # MySQL Connection Pool & Auto-seed
+│   ├── controllers/          # CRUD, Live Search, Stats, Import/Export
+│   ├── routes/               # API endpoints
+│   ├── data/                 # File dữ liệu từ vựng gốc hacknao_vocab.json
+│   ├── scripts/              # Script khởi tạo DB & trích xuất sách PDF
+│   ├── public/pages/         # Ảnh các trang sách PDF
+│   ├── server.js             # Server Express
+│   └── package.json
+│
+├── frontend/                 # Giao diện React 19 + Vite
+│   ├── src/
+│   │   ├── components/       # Các React components (Navbar, Cards, Modals...)
+│   │   ├── hooks/            # Custom Hook useSpeech phát âm
+│   │   ├── App.jsx           # State Orchestrator
+│   │   ├── index.css         # Glassmorphism Design System & Theme
+│   │   └── main.jsx          # Entry point React 19
+│   ├── vite.config.js        # Cấu hình Vite & Proxy tới backend
+│   ├── index.html
+│   └── package.json
+│
+└── package.json              # Điều phối chạy song song backend & frontend
+```
 
-2. **Cấu hình cơ sở dữ liệu (`.env`)**:
-   Tạo file `.env` từ `.env.example`:
-   ```env
-   PORT=3000
-   DB_HOST=localhost
-   DB_USER=root
-   DB_PASS=
-   DB_NAME=hacknao_db
-   ```
+---
 
-3. **Khởi tạo Database & Dữ liệu mẫu**:
-   ```bash
-   # Khởi tạo bảng dữ liệu
-   npm run db:init
+## 🚀 Hướng Dẫn Khởi Chạy
 
-   # Nạp dữ liệu 50 Unit từ vựng mẫu
-   npm run db:seed
-   ```
+### 1. Bật MySQL trong XAMPP
+- Mở **XAMPP Control Panel** ➔ Bấm **Start** ở dòng **MySQL**.
 
-4. **Chạy ứng dụng**:
-   ```bash
-   npm start
-   # Hoặc chế độ dev watcher:
-   npm run dev
-   ```
+### 2. Khởi chạy toàn bộ dự án
+Mở Terminal tại thư mục `f:\hacknao\` và chạy lệnh duy nhất:
+```bash
+npm run dev
+```
+*(Hoặc `npm start`)*
 
-5. **Truy cập**:
-   Mở trình duyệt tại `http://localhost:3000`
+Hệ thống sẽ tự động:
+- Khởi chạy **Express Backend** tại: `http://localhost:5000`
+- Khởi chạy **React 19 Frontend** tại: `http://localhost:3000`
+
+---
+
+## 🛠️ Các Lệnh Khác
+
+| Lệnh | Mô Tả |
+| :--- | :--- |
+| `npm run dev` | Chạy song song cả Backend và Frontend |
+| `npm run dev:backend` | Chỉ chạy Backend (Express) |
+| `npm run dev:frontend` | Chỉ chạy Frontend (React 19 Vite) |
+| `npm run build` | Build bản tối ưu cho Frontend |
+| `npm run db:init` | Khởi tạo lại database MySQL và bảng dữ liệu |
+| `npm run db:seed` | Nạp lại dữ liệu từ vựng mẫu từ file JSON vào MySQL |
