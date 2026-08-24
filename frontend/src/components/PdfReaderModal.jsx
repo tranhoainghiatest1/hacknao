@@ -123,7 +123,38 @@ const PAGE_OPTIONS = [
   { value: 383, label: 'Trang 383 - Unit 39: Tổng kết từ vựng' },
   { value: 384, label: 'Trang 384 - Unit 40 (Describing 3): Truyện chêm' },
   { value: 387, label: 'Trang 387 - Unit 40: Từ vựng 01-05' },
-  { value: 392, label: 'Trang 392 - Unit 40: Tổng kết từ vựng' }
+  { value: 392, label: 'Trang 392 - Unit 40: Tổng kết từ vựng' },
+  { value: 393, label: 'Trang 393 - Unit 41 (Describing 4): Truyện chêm' },
+  { value: 396, label: 'Trang 396 - Unit 41: Từ vựng 01-04' },
+  { value: 401, label: 'Trang 401 - Unit 41: Tổng kết từ vựng' },
+  { value: 402, label: 'Trang 402 - Unit 42 (Describing 5): Truyện chêm' },
+  { value: 405, label: 'Trang 405 - Unit 42: Từ vựng 01-04' },
+  { value: 410, label: 'Trang 410 - Unit 42: Tổng kết từ vựng' },
+  { value: 411, label: 'Trang 411 - Unit 43 (Travel 1): Truyện chêm' },
+  { value: 414, label: 'Trang 414 - Unit 43: Từ vựng 01-04' },
+  { value: 420, label: 'Trang 420 - Unit 43: Tổng kết từ vựng' },
+  { value: 421, label: 'Trang 421 - Unit 44 (Travel 2): Truyện chêm' },
+  { value: 424, label: 'Trang 424 - Unit 44: Từ vựng 01-04' },
+  { value: 430, label: 'Trang 430 - Unit 44: Tổng kết từ vựng' },
+  { value: 431, label: 'Trang 431 - Unit 45 (Travel 3): Truyện chêm' },
+  { value: 434, label: 'Trang 434 - Unit 45: Từ vựng 01-04' },
+  { value: 440, label: 'Trang 440 - Unit 45: Tổng kết từ vựng' },
+  { value: 441, label: 'Trang 441 - Unit 46 (Creatures): Truyện chêm' },
+  { value: 444, label: 'Trang 444 - Unit 46: Từ vựng 01-04' },
+  { value: 449, label: 'Trang 449 - Unit 46: Tổng kết từ vựng' },
+  { value: 450, label: 'Trang 450 - Unit 47 (Natural World 1): Truyện chêm' },
+  { value: 453, label: 'Trang 453 - Unit 47: Từ vựng 01-04' },
+  { value: 458, label: 'Trang 458 - Unit 47: Tổng kết từ vựng' },
+  { value: 459, label: 'Trang 459 - Unit 48 (Natural World 2): Truyện chêm' },
+  { value: 462, label: 'Trang 462 - Unit 48: Từ vựng 01-04' },
+  { value: 467, label: 'Trang 467 - Unit 48: Tổng kết từ vựng' },
+  { value: 468, label: 'Trang 468 - Unit 49 (Arts & Media 1): Truyện chêm' },
+  { value: 471, label: 'Trang 471 - Unit 49: Từ vựng 01-04' },
+  { value: 477, label: 'Trang 477 - Unit 49: Tổng kết từ vựng' },
+  { value: 478, label: 'Trang 478 - Unit 50 (Arts & Media 2): Truyện chêm' },
+  { value: 481, label: 'Trang 481 - Unit 50: Từ vựng 01-04' },
+  { value: 486, label: 'Trang 486 - Unit 50: Tổng kết từ vựng' },
+  { value: 487, label: 'Trang 487 - Toàn văn Mục Lục 50 Units sách Hack Não 1500' }
 ];
 
 export function PdfReaderModal({ isOpen, pageNumber = 14, onClose }) {
@@ -152,7 +183,7 @@ export function PdfReaderModal({ isOpen, pageNumber = 14, onClose }) {
   };
 
   const handleNext = () => {
-    if (currentPage < 395) {
+    if (currentPage < 488) {
       setCurrentPage((p) => p + 1);
     }
   };
@@ -163,7 +194,7 @@ export function PdfReaderModal({ isOpen, pageNumber = 14, onClose }) {
         <div className="modal-header">
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
             <h3 className="modal-title"><BookOpen size={20} /> Sách Hack Não 1500 Từ Tiếng Anh</h3>
-            <span className="badge badge-unit">Trang {currentPage} / 395</span>
+            <span className="badge badge-unit">Trang {currentPage} / 488</span>
           </div>
           <button className="modal-close-btn" onClick={onClose} aria-label="Đóng cửa sổ">
             <X size={20} />
@@ -208,7 +239,7 @@ export function PdfReaderModal({ isOpen, pageNumber = 14, onClose }) {
             <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', fontWeight: 600, minWidth: 60, textAlign: 'center' }}>
               Trang {currentPage}
             </span>
-            <button className="btn btn-outline" onClick={handleNext} disabled={currentPage >= 395}>
+            <button className="btn btn-outline" onClick={handleNext} disabled={currentPage >= 488}>
               Trang kế <ChevronRight size={16} />
             </button>
           </div>

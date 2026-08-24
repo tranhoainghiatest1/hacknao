@@ -8,8 +8,9 @@ from seed_units_1_to_10 import UNITS_DATA as UNITS_1_TO_10
 from seed_units_11_to_20 import UNITS_11_TO_20
 from seed_units_21_to_30 import UNITS_21_TO_30
 from seed_units_31_to_40 import UNITS_31_TO_40
+from seed_units_41_to_50 import UNITS_41_TO_50
 
-ALL_UNITS = UNITS_1_TO_10 + UNITS_11_TO_20 + UNITS_21_TO_30 + UNITS_31_TO_40
+ALL_UNITS = UNITS_1_TO_10 + UNITS_11_TO_20 + UNITS_21_TO_30 + UNITS_31_TO_40 + UNITS_41_TO_50
 
 def generate_vocab_dataset():
     all_vocab = []
@@ -33,7 +34,7 @@ def generate_vocab_dataset():
     with open(output_path, 'w', encoding='utf-8') as f:
         json.dump(all_vocab, f, ensure_ascii=False, indent=2)
 
-    print(f"✅ Đã xuất thành công {len(all_vocab)} từ vựng chuẩn Unit 1 đến Unit 40 vào: {output_path}")
+    print(f"🎉 Đã xuất thành công {len(all_vocab)} từ vựng chuẩn Unit 1 đến Unit 50 (TOÀN BỘ 50 UNITS CUỐN SÁCH) vào: {output_path}")
 
 if __name__ == '__main__':
     generate_vocab_dataset()
