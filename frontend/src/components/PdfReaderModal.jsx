@@ -93,7 +93,37 @@ const PAGE_OPTIONS = [
   { value: 283, label: 'Trang 283 - Unit 29: Tổng kết từ vựng' },
   { value: 284, label: 'Trang 284 - Unit 30 (Technology 1): Truyện chêm' },
   { value: 287, label: 'Trang 287 - Unit 30: Từ vựng 01-05' },
-  { value: 293, label: 'Trang 293 - Unit 30: Tổng kết từ vựng' }
+  { value: 293, label: 'Trang 293 - Unit 30: Tổng kết từ vựng' },
+  { value: 294, label: 'Trang 294 - Unit 31 (Technology 2): Truyện chêm' },
+  { value: 297, label: 'Trang 297 - Unit 31: Từ vựng 01-05' },
+  { value: 303, label: 'Trang 303 - Unit 31: Tổng kết từ vựng' },
+  { value: 304, label: 'Trang 304 - Unit 32 (Action 1): Truyện chêm' },
+  { value: 307, label: 'Trang 307 - Unit 32: Từ vựng 01-05' },
+  { value: 313, label: 'Trang 313 - Unit 32: Tổng kết từ vựng' },
+  { value: 314, label: 'Trang 314 - Unit 33 (Action 2): Truyện chêm' },
+  { value: 317, label: 'Trang 317 - Unit 33: Từ vựng 01-05' },
+  { value: 323, label: 'Trang 323 - Unit 33: Tổng kết từ vựng' },
+  { value: 324, label: 'Trang 324 - Unit 34 (Action 3): Truyện chêm' },
+  { value: 327, label: 'Trang 327 - Unit 34: Từ vựng 01-06' },
+  { value: 333, label: 'Trang 333 - Unit 34: Tổng kết từ vựng' },
+  { value: 334, label: 'Trang 334 - Unit 35 (Action 4): Truyện chêm' },
+  { value: 337, label: 'Trang 337 - Unit 35: Từ vựng 01-05' },
+  { value: 343, label: 'Trang 343 - Unit 35: Tổng kết từ vựng' },
+  { value: 344, label: 'Trang 344 - Unit 36 (Action 5): Truyện chêm' },
+  { value: 347, label: 'Trang 347 - Unit 36: Từ vựng 01-06' },
+  { value: 354, label: 'Trang 354 - Unit 36: Tổng kết từ vựng' },
+  { value: 355, label: 'Trang 355 - Unit 37 (Action 6): Truyện chêm' },
+  { value: 358, label: 'Trang 358 - Unit 37: Từ vựng 01-06' },
+  { value: 364, label: 'Trang 364 - Unit 37: Tổng kết từ vựng' },
+  { value: 365, label: 'Trang 365 - Unit 38 (Describing 1): Truyện chêm' },
+  { value: 368, label: 'Trang 368 - Unit 38: Từ vựng 01-05' },
+  { value: 374, label: 'Trang 374 - Unit 38: Tổng kết từ vựng' },
+  { value: 375, label: 'Trang 375 - Unit 39 (Describing 2): Truyện chêm' },
+  { value: 378, label: 'Trang 378 - Unit 39: Từ vựng 01-05' },
+  { value: 383, label: 'Trang 383 - Unit 39: Tổng kết từ vựng' },
+  { value: 384, label: 'Trang 384 - Unit 40 (Describing 3): Truyện chêm' },
+  { value: 387, label: 'Trang 387 - Unit 40: Từ vựng 01-05' },
+  { value: 392, label: 'Trang 392 - Unit 40: Tổng kết từ vựng' }
 ];
 
 export function PdfReaderModal({ isOpen, pageNumber = 14, onClose }) {
@@ -122,7 +152,7 @@ export function PdfReaderModal({ isOpen, pageNumber = 14, onClose }) {
   };
 
   const handleNext = () => {
-    if (currentPage < 295) {
+    if (currentPage < 395) {
       setCurrentPage((p) => p + 1);
     }
   };
@@ -133,7 +163,7 @@ export function PdfReaderModal({ isOpen, pageNumber = 14, onClose }) {
         <div className="modal-header">
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
             <h3 className="modal-title"><BookOpen size={20} /> Sách Hack Não 1500 Từ Tiếng Anh</h3>
-            <span className="badge badge-unit">Trang {currentPage} / 295</span>
+            <span className="badge badge-unit">Trang {currentPage} / 395</span>
           </div>
           <button className="modal-close-btn" onClick={onClose} aria-label="Đóng cửa sổ">
             <X size={20} />
@@ -178,7 +208,7 @@ export function PdfReaderModal({ isOpen, pageNumber = 14, onClose }) {
             <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', fontWeight: 600, minWidth: 60, textAlign: 'center' }}>
               Trang {currentPage}
             </span>
-            <button className="btn btn-outline" onClick={handleNext} disabled={currentPage >= 295}>
+            <button className="btn btn-outline" onClick={handleNext} disabled={currentPage >= 395}>
               Trang kế <ChevronRight size={16} />
             </button>
           </div>
