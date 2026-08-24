@@ -6,7 +6,6 @@ const PAGE_OPTIONS = [
   { value: 8, label: 'Trang 8 - Phương pháp 3 trong 1' },
   { value: 11, label: 'Trang 11 - Unit 1: Truyện chêm' },
   { value: 14, label: 'Trang 14 - Unit 1: Từ vựng 01-04' },
-  { value: 15, label: 'Trang 15 - Unit 1: Từ vựng 05-10' },
   { value: 20, label: 'Trang 20 - Unit 1: Tổng kết từ vựng' },
   { value: 21, label: 'Trang 21 - Unit 2: Truyện chêm' },
   { value: 24, label: 'Trang 24 - Unit 2: Từ vựng 01-04' },
@@ -34,7 +33,37 @@ const PAGE_OPTIONS = [
   { value: 95, label: 'Trang 95 - Unit 9: Tổng kết từ vựng' },
   { value: 96, label: 'Trang 96 - Unit 10: Truyện chêm' },
   { value: 98, label: 'Trang 98 - Unit 10: Từ vựng 01-05' },
-  { value: 105, label: 'Trang 105 - Unit 10: Tổng kết từ vựng' }
+  { value: 105, label: 'Trang 105 - Unit 10: Tổng kết từ vựng' },
+  { value: 106, label: 'Trang 106 - Unit 11 (Work 1): Truyện chêm' },
+  { value: 109, label: 'Trang 109 - Unit 11: Từ vựng 01-04' },
+  { value: 114, label: 'Trang 114 - Unit 11: Tổng kết từ vựng' },
+  { value: 115, label: 'Trang 115 - Unit 12 (Work 2): Truyện chêm' },
+  { value: 118, label: 'Trang 118 - Unit 12: Từ vựng 01-04' },
+  { value: 124, label: 'Trang 124 - Unit 12: Tổng kết từ vựng' },
+  { value: 125, label: 'Trang 125 - Unit 13 (Work 3): Truyện chêm' },
+  { value: 128, label: 'Trang 128 - Unit 13: Từ vựng 01-04' },
+  { value: 134, label: 'Trang 134 - Unit 13: Tổng kết từ vựng' },
+  { value: 135, label: 'Trang 135 - Unit 14 (Work 4): Truyện chêm' },
+  { value: 138, label: 'Trang 138 - Unit 14: Từ vựng 01-04' },
+  { value: 143, label: 'Trang 143 - Unit 14: Tổng kết từ vựng' },
+  { value: 144, label: 'Trang 144 - Unit 15 (Personality 1): Truyện chêm' },
+  { value: 147, label: 'Trang 147 - Unit 15: Từ vựng 01-04' },
+  { value: 152, label: 'Trang 152 - Unit 15: Tổng kết từ vựng' },
+  { value: 153, label: 'Trang 153 - Unit 16 (Personality 2): Truyện chêm' },
+  { value: 156, label: 'Trang 156 - Unit 16: Từ vựng 01-04' },
+  { value: 161, label: 'Trang 161 - Unit 16: Tổng kết từ vựng' },
+  { value: 162, label: 'Trang 162 - Unit 17 (Personality 3): Truyện chêm' },
+  { value: 165, label: 'Trang 165 - Unit 17: Từ vựng 01-04' },
+  { value: 170, label: 'Trang 170 - Unit 17: Tổng kết từ vựng' },
+  { value: 171, label: 'Trang 171 - Unit 18 (Home 1): Truyện chêm' },
+  { value: 174, label: 'Trang 174 - Unit 18: Từ vựng 01-04' },
+  { value: 179, label: 'Trang 179 - Unit 18: Tổng kết từ vựng' },
+  { value: 180, label: 'Trang 180 - Unit 19 (Home 2): Truyện chêm' },
+  { value: 183, label: 'Trang 183 - Unit 19: Từ vựng 01-04' },
+  { value: 188, label: 'Trang 188 - Unit 19: Tổng kết từ vựng' },
+  { value: 189, label: 'Trang 189 - Unit 20 (Relationship & Places): Truyện chêm' },
+  { value: 192, label: 'Trang 192 - Unit 20: Từ vựng 01-04' },
+  { value: 197, label: 'Trang 197 - Unit 20: Tổng kết từ vựng' }
 ];
 
 export function PdfReaderModal({ isOpen, pageNumber = 14, onClose }) {
@@ -63,7 +92,7 @@ export function PdfReaderModal({ isOpen, pageNumber = 14, onClose }) {
   };
 
   const handleNext = () => {
-    if (currentPage < 105) {
+    if (currentPage < 198) {
       setCurrentPage((p) => p + 1);
     }
   };
@@ -74,7 +103,7 @@ export function PdfReaderModal({ isOpen, pageNumber = 14, onClose }) {
         <div className="modal-header">
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
             <h3 className="modal-title"><BookOpen size={20} /> Sách Hack Não 1500 Từ Tiếng Anh</h3>
-            <span className="badge badge-unit">Trang {currentPage} / 105</span>
+            <span className="badge badge-unit">Trang {currentPage} / 198</span>
           </div>
           <button className="modal-close-btn" onClick={onClose} aria-label="Đóng cửa sổ">
             <X size={20} />
@@ -119,7 +148,7 @@ export function PdfReaderModal({ isOpen, pageNumber = 14, onClose }) {
             <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', fontWeight: 600, minWidth: 60, textAlign: 'center' }}>
               Trang {currentPage}
             </span>
-            <button className="btn btn-outline" onClick={handleNext} disabled={currentPage >= 105}>
+            <button className="btn btn-outline" onClick={handleNext} disabled={currentPage >= 198}>
               Trang kế <ChevronRight size={16} />
             </button>
           </div>
