@@ -61,9 +61,39 @@ const PAGE_OPTIONS = [
   { value: 180, label: 'Trang 180 - Unit 19 (Home 2): Truyện chêm' },
   { value: 183, label: 'Trang 183 - Unit 19: Từ vựng 01-04' },
   { value: 188, label: 'Trang 188 - Unit 19: Tổng kết từ vựng' },
-  { value: 189, label: 'Trang 189 - Unit 20 (Relationship & Places): Truyện chêm' },
+  { value: 189, label: 'Trang 189 - Unit 20 (Relationship 1): Truyện chêm' },
   { value: 192, label: 'Trang 192 - Unit 20: Từ vựng 01-04' },
-  { value: 197, label: 'Trang 197 - Unit 20: Tổng kết từ vựng' }
+  { value: 197, label: 'Trang 197 - Unit 20: Tổng kết từ vựng' },
+  { value: 198, label: 'Trang 198 - Unit 21 (Relationship 2): Truyện chêm' },
+  { value: 201, label: 'Trang 201 - Unit 21: Từ vựng 01-05' },
+  { value: 205, label: 'Trang 205 - Unit 21: Tổng kết từ vựng' },
+  { value: 206, label: 'Trang 206 - Unit 22 (Body & Health): Truyện chêm' },
+  { value: 209, label: 'Trang 209 - Unit 22: Từ vựng 01-05' },
+  { value: 215, label: 'Trang 215 - Unit 22: Tổng kết từ vựng' },
+  { value: 216, label: 'Trang 216 - Unit 23 (Sports & Gaming): Truyện chêm' },
+  { value: 219, label: 'Trang 219 - Unit 23: Từ vựng 01-06' },
+  { value: 225, label: 'Trang 225 - Unit 23: Tổng kết từ vựng' },
+  { value: 226, label: 'Trang 226 - Unit 24 (Shop): Truyện chêm' },
+  { value: 230, label: 'Trang 230 - Unit 24: Từ vựng 01-06' },
+  { value: 237, label: 'Trang 237 - Unit 24: Tổng kết từ vựng' },
+  { value: 238, label: 'Trang 238 - Unit 25 (Trade 1): Truyện chêm' },
+  { value: 241, label: 'Trang 241 - Unit 25: Từ vựng 01-05' },
+  { value: 247, label: 'Trang 247 - Unit 25: Tổng kết từ vựng' },
+  { value: 248, label: 'Trang 248 - Unit 26 (Trade 2): Truyện chêm' },
+  { value: 251, label: 'Trang 251 - Unit 26: Từ vựng 01-05' },
+  { value: 256, label: 'Trang 256 - Unit 26: Tổng kết từ vựng' },
+  { value: 257, label: 'Trang 257 - Unit 27 (Trade 3): Truyện chêm' },
+  { value: 260, label: 'Trang 260 - Unit 27: Từ vựng 01-05' },
+  { value: 265, label: 'Trang 265 - Unit 27: Tổng kết từ vựng' },
+  { value: 266, label: 'Trang 266 - Unit 28 (Politics 1): Truyện chêm' },
+  { value: 269, label: 'Trang 269 - Unit 28: Từ vựng 01-05' },
+  { value: 274, label: 'Trang 274 - Unit 28: Tổng kết từ vựng' },
+  { value: 275, label: 'Trang 275 - Unit 29 (Politics 2): Truyện chêm' },
+  { value: 278, label: 'Trang 278 - Unit 29: Từ vựng 01-05' },
+  { value: 283, label: 'Trang 283 - Unit 29: Tổng kết từ vựng' },
+  { value: 284, label: 'Trang 284 - Unit 30 (Technology 1): Truyện chêm' },
+  { value: 287, label: 'Trang 287 - Unit 30: Từ vựng 01-05' },
+  { value: 293, label: 'Trang 293 - Unit 30: Tổng kết từ vựng' }
 ];
 
 export function PdfReaderModal({ isOpen, pageNumber = 14, onClose }) {
@@ -92,7 +122,7 @@ export function PdfReaderModal({ isOpen, pageNumber = 14, onClose }) {
   };
 
   const handleNext = () => {
-    if (currentPage < 198) {
+    if (currentPage < 295) {
       setCurrentPage((p) => p + 1);
     }
   };
@@ -103,7 +133,7 @@ export function PdfReaderModal({ isOpen, pageNumber = 14, onClose }) {
         <div className="modal-header">
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
             <h3 className="modal-title"><BookOpen size={20} /> Sách Hack Não 1500 Từ Tiếng Anh</h3>
-            <span className="badge badge-unit">Trang {currentPage} / 198</span>
+            <span className="badge badge-unit">Trang {currentPage} / 295</span>
           </div>
           <button className="modal-close-btn" onClick={onClose} aria-label="Đóng cửa sổ">
             <X size={20} />
@@ -148,7 +178,7 @@ export function PdfReaderModal({ isOpen, pageNumber = 14, onClose }) {
             <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', fontWeight: 600, minWidth: 60, textAlign: 'center' }}>
               Trang {currentPage}
             </span>
-            <button className="btn btn-outline" onClick={handleNext} disabled={currentPage >= 198}>
+            <button className="btn btn-outline" onClick={handleNext} disabled={currentPage >= 295}>
               Trang kế <ChevronRight size={16} />
             </button>
           </div>
