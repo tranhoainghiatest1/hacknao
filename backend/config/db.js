@@ -124,6 +124,9 @@ export async function seedDefaultData() {
     if (!Array.isArray(vocabList) || vocabList.length === 0) return;
     if (!pool) return;
 
+    // Xóa sạch dữ liệu cũ để tránh trùng lặp khi chạy seed lại
+    await pool.query('TRUNCATE TABLE vocabularies;');
+
     const insertQuery = `
       INSERT INTO vocabularies 
       (word_number, word, phonetic, word_type, meaning_vi, sound_bridge, definition_en, example_en, example_vi, unit, unit_title, category, page_number, image_url, status)
