@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { X, BookOpen, ChevronLeft, ChevronRight } from 'lucide-react';
 
 const PAGE_OPTIONS = [
@@ -17,6 +17,20 @@ const PAGE_OPTIONS = [
 export function PdfReaderModal({ isOpen, pageNumber = 14, onClose }) {
   const [currentPage, setCurrentPage] = useState(pageNumber);
 
+  useEffect(() => {
+    setCurrentPage(pageNumber);
+  }, [pageNumber, isOpen]);
+
+  // ESC shortcut
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
+
   if (!isOpen) return null;
 
   const handlePrev = () => {
@@ -32,14 +46,14 @@ export function PdfReaderModal({ isOpen, pageNumber = 14, onClose }) {
   };
 
   return (
-    <div className="modal-overlay" onClick={onClose}>
+    <div className="modal-overlay" onClick={onClose} role="dialog" aria-modal="true">
       <div className="modal-card modal-lg" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
             <h3 className="modal-title"><BookOpen size={20} /> Sách Hack Não 1500 Từ Tiếng Anh</h3>
             <span className="badge badge-unit">Trang {currentPage}</span>
           </div>
-          <button className="modal-close-btn" onClick={onClose}>
+          <button className="modal-close-btn" onClick={onClose} aria-label="Đóng cửa sổ">
             <X size={20} />
           </button>
         </div>
@@ -62,6 +76,7 @@ export function PdfReaderModal({ isOpen, pageNumber = 14, onClose }) {
             <select
               value={currentPage}
               onChange={(e) => setCurrentPage(parseInt(e.target.value, 10))}
+              aria-label="Chọn trang sách PDF"
             >
               {PAGE_OPTIONS.map((opt) => (
                 <option key={opt.value} value={opt.value}>

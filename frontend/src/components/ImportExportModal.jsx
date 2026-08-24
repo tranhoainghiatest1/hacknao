@@ -1,11 +1,21 @@
-import React, { useState, useRef } from 'react';
-import { X, CloudUpload, FileCode, Upload } from 'lucide-react';
+import React, { useState, useRef, useEffect } from 'react';
+import { X, CloudUpload, FileCode, Upload, Loader2 } from 'lucide-react';
 
 export function ImportExportModal({ isOpen, onClose, onImportSubmit }) {
   const [fileData, setFileData] = useState(null);
   const [fileName, setFileName] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const fileInputRef = useRef(null);
+
+  // ESC shortcut
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape' && !submitting) onClose();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, submitting, onClose]);
 
   if (!isOpen) return null;
 
@@ -39,7 +49,7 @@ export function ImportExportModal({ isOpen, onClose, onImportSubmit }) {
   };
 
   const handleSubmit = async () => {
-    if (!fileData) return;
+    if (!fileData || submitting) return;
     setSubmitting(true);
     await onImportSubmit(fileData);
     setSubmitting(false);
@@ -47,11 +57,11 @@ export function ImportExportModal({ isOpen, onClose, onImportSubmit }) {
   };
 
   return (
-    <div className="modal-overlay" onClick={onClose}>
+    <div className="modal-overlay" onClick={onClose} role="dialog" aria-modal="true">
       <div className="modal-card modal-md" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
           <h3 className="modal-title"><Upload size={20} /> Nhập Dữ Liệu Từ Vựng JSON</h3>
-          <button className="modal-close-btn" onClick={onClose}><X size={20} /></button>
+          <button className="modal-close-btn" onClick={onClose} aria-label="Đóng cửa sổ"><X size={20} /></button>
         </div>
 
         <div className="modal-body">
@@ -60,6 +70,9 @@ export function ImportExportModal({ isOpen, onClose, onImportSubmit }) {
             onDragOver={(e) => e.preventDefault()}
             onDrop={handleDrop}
             onClick={() => fileInputRef.current?.click()}
+            tabIndex={0}
+            role="button"
+            aria-label="Kéo thả hoặc bấm để tải lên file JSON"
           >
             <CloudUpload size={40} style={{ color: 'var(--primary)', marginBottom: 12 }} />
             <h4>Kéo thả file .json vào đây</h4>
@@ -85,14 +98,14 @@ export function ImportExportModal({ isOpen, onClose, onImportSubmit }) {
         </div>
 
         <div className="modal-footer">
-          <button className="btn btn-ghost" onClick={onClose}>Hủy</button>
+          <button className="btn btn-ghost" onClick={onClose} disabled={submitting}>Hủy (Esc)</button>
           <button 
             className="btn btn-primary" 
             disabled={!fileData || submitting} 
             onClick={handleSubmit}
           >
-            <Upload size={16} />
-            {submitting ? 'Đang import...' : 'Tiến Hành Import Vào MySQL'}
+            {submitting ? <Loader2 size={16} className="spinner" style={{ width: 16, height: 16, margin: 0 }} /> : <Upload size={16} />}
+            {submitting ? 'Đang import vào MySQL...' : 'Tiến Hành Import Vào MySQL'}
           </button>
         </div>
       </div>

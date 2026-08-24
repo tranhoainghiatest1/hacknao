@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { 
   X, 
   Volume2, 
@@ -11,24 +11,41 @@ import {
   FileCode, 
   Edit, 
   Trash2, 
-  ChevronRight 
+  ChevronRight,
+  Copy
 } from 'lucide-react';
 
 export function DetailModal({
   item,
   onClose,
   onSpeak,
+  speakingWord,
   onStatusChange,
   onEdit,
   onDelete,
-  onOpenPdf
+  onOpenPdf,
+  onCopy
 }) {
+  // ESC key to close modal (Impeccable Keyboard Standard)
+  useEffect(() => {
+    if (!item) return;
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [item, onClose]);
+
   if (!item) return null;
 
   const wordTypeClass = `badge-${item.word_type || 'noun'}`;
+  const isSpeakingWord = speakingWord === item.word;
+  const isSpeakingExample = speakingWord === item.example_en;
 
   return (
-    <div className="modal-overlay" onClick={onClose}>
+    <div className="modal-overlay" onClick={onClose} role="dialog" aria-modal="true">
       <div className="modal-card modal-lg" onClick={(e) => e.stopPropagation()}>
         {/* Header */}
         <div className="modal-header">
@@ -36,7 +53,7 @@ export function DetailModal({
             <span className="badge badge-unit">Unit {item.unit || 1} - {item.unit_title || 'General'}</span>
             <span className="badge badge-category">{item.category || 'General'}</span>
           </div>
-          <button className="modal-close-btn" onClick={onClose}>
+          <button className="modal-close-btn" onClick={onClose} aria-label="Đóng cửa sổ">
             <X size={20} />
           </button>
         </div>
@@ -49,12 +66,23 @@ export function DetailModal({
               <span className="detail-phonetic">{item.phonetic}</span>
               <span className={`badge ${wordTypeClass}`}>{item.word_type || 'noun'}</span>
               <button 
-                className="btn-speak" 
+                className={`btn-speak ${isSpeakingWord ? 'btn-speaking' : ''}`}
                 onClick={() => onSpeak(item.word)}
                 title="Phát âm từ vựng"
+                aria-label={`Phát âm từ ${item.word}`}
               >
                 <Volume2 size={18} />
               </button>
+              {onCopy && (
+                <button
+                  className="btn-speak"
+                  onClick={() => onCopy(item.word)}
+                  title="Sao chép từ vựng"
+                  aria-label="Sao chép từ"
+                >
+                  <Copy size={16} />
+                </button>
+              )}
             </div>
 
             <div>
@@ -63,6 +91,7 @@ export function DetailModal({
                 style={{ background: 'var(--bg-surface-elevated)', border: '1px solid var(--border-color)', color: 'var(--text-primary)', padding: '6px 12px', borderRadius: 'var(--radius-md)' }}
                 value={item.status || 'new'}
                 onChange={(e) => onStatusChange(item.id, e.target.value)}
+                aria-label="Thay đổi trạng thái học"
               >
                 <option value="new">🆕 Mới (New)</option>
                 <option value="learning">⏳ Đang học (Learning)</option>
@@ -103,9 +132,10 @@ export function DetailModal({
                   <span>{item.example_en || 'No example sentence.'}</span>
                   {item.example_en && (
                     <button 
-                      className="btn-speak-sm" 
+                      className={`btn-speak-sm ${isSpeakingExample ? 'btn-speaking' : ''}`}
                       onClick={() => onSpeak(item.example_en)}
                       title="Phát âm câu ví dụ"
+                      aria-label="Phát âm câu ví dụ"
                     >
                       <Volume2 size={13} />
                     </button>

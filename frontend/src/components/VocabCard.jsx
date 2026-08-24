@@ -1,12 +1,21 @@
 import React from 'react';
-import { Volume2, Eye, Edit, Trash2, Lightbulb } from 'lucide-react';
+import { Volume2, Eye, Edit, Trash2, Lightbulb, Copy } from 'lucide-react';
 
-export function VocabCard({ item, onSpeak, onDetail, onEdit, onDelete }) {
+export function VocabCard({ 
+  item, 
+  onSpeak, 
+  speakingWord, 
+  onDetail, 
+  onEdit, 
+  onDelete, 
+  onCopy 
+}) {
   const statusLabel = item.status === 'mastered' ? 'Đã thuộc' : (item.status === 'learning' ? 'Đang học' : 'Mới');
   const wordTypeClass = `badge-${item.word_type || 'noun'}`;
+  const isSpeaking = speakingWord === item.word;
 
   return (
-    <div className="vocab-card">
+    <div className="vocab-card" tabIndex={0}>
       <div>
         <div className="card-top">
           <span className="card-number">#{item.word_number || item.id}</span>
@@ -53,16 +62,28 @@ export function VocabCard({ item, onSpeak, onDetail, onEdit, onDelete }) {
 
         <div className="card-footer-actions">
           <button 
-            className="card-btn-action btn-action-speak" 
+            className={`card-btn-action btn-action-speak ${isSpeaking ? 'btn-speaking' : ''}`}
             onClick={(e) => { e.stopPropagation(); onSpeak(item.word); }}
-            title="Phát âm tiếng Anh chuẩn"
+            title={isSpeaking ? 'Đang phát âm...' : 'Nghe phát âm'}
+            aria-label={`Phát âm từ ${item.word}`}
           >
             <Volume2 size={15} />
           </button>
+          {onCopy && (
+            <button
+              className="card-btn-action"
+              onClick={(e) => { e.stopPropagation(); onCopy(item.word); }}
+              title="Sao chép từ vựng"
+              aria-label={`Sao chép từ ${item.word}`}
+            >
+              <Copy size={14} />
+            </button>
+          )}
           <button 
             className="card-btn-action" 
             onClick={(e) => { e.stopPropagation(); onDetail(item); }}
             title="Xem chi tiết"
+            aria-label={`Xem chi tiết từ ${item.word}`}
           >
             <Eye size={15} />
           </button>
@@ -70,6 +91,7 @@ export function VocabCard({ item, onSpeak, onDetail, onEdit, onDelete }) {
             className="card-btn-action" 
             onClick={(e) => { e.stopPropagation(); onEdit(item); }}
             title="Chỉnh sửa"
+            aria-label={`Sửa từ ${item.word}`}
           >
             <Edit size={15} />
           </button>
@@ -77,6 +99,7 @@ export function VocabCard({ item, onSpeak, onDetail, onEdit, onDelete }) {
             className="card-btn-action btn-action-delete" 
             onClick={(e) => { e.stopPropagation(); onDelete(item); }}
             title="Xóa từ vựng"
+            aria-label={`Xóa từ ${item.word}`}
           >
             <Trash2 size={15} />
           </button>

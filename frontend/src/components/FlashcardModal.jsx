@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { X, Volume2, RotateCw, CheckCheck, ArrowLeft, ArrowRight, Lightbulb } from 'lucide-react';
 
-export function FlashcardModal({ isOpen, items, onClose, onSpeak, onMasterWord }) {
+export function FlashcardModal({ isOpen, items, onClose, onSpeak, speakingWord, onMasterWord }) {
   const [index, setIndex] = useState(0);
   const [flipped, setFlipped] = useState(false);
 
@@ -9,31 +9,6 @@ export function FlashcardModal({ isOpen, items, onClose, onSpeak, onMasterWord }
     setIndex(0);
     setFlipped(false);
   }, [isOpen]);
-
-  // Keyboard navigation
-  useEffect(() => {
-    if (!isOpen) return;
-
-    const handleKeyDown = (e) => {
-      if (e.key === 'ArrowLeft') {
-        e.preventDefault();
-        handlePrev();
-      } else if (e.key === 'ArrowRight') {
-        e.preventDefault();
-        handleNext();
-      } else if (e.key === ' ' || e.key === 'ArrowUp' || e.key === 'ArrowDown') {
-        e.preventDefault();
-        setFlipped((f) => !f);
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen, index, items]);
-
-  if (!isOpen || !items || items.length === 0) return null;
-
-  const current = items[index];
 
   const handlePrev = () => {
     if (index > 0) {
@@ -50,12 +25,41 @@ export function FlashcardModal({ isOpen, items, onClose, onSpeak, onMasterWord }
   };
 
   const handleMaster = async () => {
-    await onMasterWord(current.id);
+    if (!items || !items[index]) return;
+    await onMasterWord(items[index].id);
     handleNext();
   };
 
+  // Keyboard navigation & ESC
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        onClose();
+      } else if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        handlePrev();
+      } else if (e.key === 'ArrowRight') {
+        e.preventDefault();
+        handleNext();
+      } else if (e.key === ' ' || e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+        e.preventDefault();
+        setFlipped((f) => !f);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, index, items, onClose]);
+
+  if (!isOpen || !items || items.length === 0) return null;
+
+  const current = items[index];
+  const isSpeaking = speakingWord === current.word;
+
   return (
-    <div className="modal-overlay" onClick={onClose}>
+    <div className="modal-overlay" onClick={onClose} role="dialog" aria-modal="true">
       <div className="modal-card modal-md" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
@@ -64,7 +68,7 @@ export function FlashcardModal({ isOpen, items, onClose, onSpeak, onMasterWord }
               Thẻ {index + 1} / {items.length}
             </span>
           </div>
-          <button className="modal-close-btn" onClick={onClose}>
+          <button className="modal-close-btn" onClick={onClose} aria-label="Đóng cửa sổ">
             <X size={20} />
           </button>
         </div>
@@ -86,9 +90,10 @@ export function FlashcardModal({ isOpen, items, onClose, onSpeak, onMasterWord }
                   <h2 className="fc-word">{current.word}</h2>
                   <p className="fc-phonetic">{current.phonetic}</p>
                   <button 
-                    className="btn-speak-lg" 
+                    className={`btn-speak-lg ${isSpeaking ? 'btn-speaking' : ''}`} 
                     onClick={(e) => { e.stopPropagation(); onSpeak(current.word); }}
                     title="Nghe phát âm"
+                    aria-label={`Phát âm từ ${current.word}`}
                   >
                     <Volume2 size={24} />
                   </button>
@@ -119,7 +124,7 @@ export function FlashcardModal({ isOpen, items, onClose, onSpeak, onMasterWord }
                   )}
 
                   {current.example_en && (
-                    <div className="fc-example-box">
+                    <div className="fc-example-box" style={{ marginTop: 10 }}>
                       <p style={{ fontWeight: 600 }}>"{current.example_en}"</p>
                       <p style={{ color: 'var(--text-muted)' }}>{current.example_vi}</p>
                     </div>
@@ -141,7 +146,7 @@ export function FlashcardModal({ isOpen, items, onClose, onSpeak, onMasterWord }
 
           <div className="fc-action-middle">
             <button className="btn btn-secondary" onClick={() => setFlipped(!flipped)}>
-              <RotateCw size={16} /> Lật thẻ
+              <RotateCw size={16} /> Lật thẻ (Space)
             </button>
             <button className="btn btn-success" onClick={handleMaster}>
               <CheckCheck size={16} /> Đã thuộc

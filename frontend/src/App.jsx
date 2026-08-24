@@ -51,8 +51,8 @@ export default function App() {
   const [pdfTargetPage, setPdfTargetPage] = useState(14);
   const [importModalOpen, setImportModalOpen] = useState(false);
 
-  // Hook Speech
-  const { speak } = useSpeech();
+  // Hook Speech with speaking status indicator
+  const { speak, speakingWord } = useSpeech();
 
   // Toast helper
   const showToast = useCallback((message, type = 'success') => {
@@ -62,6 +62,14 @@ export default function App() {
       setToasts((prev) => prev.filter((t) => t.id !== id));
     }, 3500);
   }, []);
+
+  // Copy helper
+  const handleCopyWord = useCallback((text) => {
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(text);
+      showToast(`Đã sao chép: "${text}"`, 'info');
+    }
+  }, [showToast]);
 
   // Theme Sync
   useEffect(() => {
@@ -346,7 +354,7 @@ export default function App() {
             <SearchX size={48} style={{ color: 'var(--text-muted)', marginBottom: 12 }} />
             <h3>Không tìm thấy từ vựng nào</h3>
             <p>Thử điều chỉnh từ khóa tìm kiếm hoặc bỏ bớt các bộ lọc đang chọn.</p>
-            <button className="btn btn-primary" onClick={handleResetFilters}>
+            <button className="btn btn-primary" onClick={handleResetFilters} style={{ marginTop: 14 }}>
               <RotateCw size={16} /> Xóa tất cả bộ lọc
             </button>
           </div>
@@ -359,9 +367,11 @@ export default function App() {
                     key={item.id}
                     item={item}
                     onSpeak={speak}
+                    speakingWord={speakingWord}
                     onDetail={(itm) => setSelectedDetailItem(itm)}
                     onEdit={(itm) => { setEditingItem(itm); setFormModalOpen(true); }}
                     onDelete={(itm) => setDeleteItem(itm)}
+                    onCopy={handleCopyWord}
                   />
                 ))}
               </div>
@@ -390,10 +400,12 @@ export default function App() {
         item={selectedDetailItem}
         onClose={() => setSelectedDetailItem(null)}
         onSpeak={speak}
+        speakingWord={speakingWord}
         onStatusChange={handleStatusChange}
         onEdit={(item) => { setSelectedDetailItem(null); setEditingItem(item); setFormModalOpen(true); }}
         onDelete={(item) => { setSelectedDetailItem(null); setDeleteItem(item); }}
         onOpenPdf={(page) => { setSelectedDetailItem(null); setPdfTargetPage(page); setPdfModalOpen(true); }}
+        onCopy={handleCopyWord}
       />
 
       <VocabFormModal
@@ -414,6 +426,7 @@ export default function App() {
         items={items}
         onClose={() => setFlashcardOpen(false)}
         onSpeak={speak}
+        speakingWord={speakingWord}
         onMasterWord={(id) => handleStatusChange(id, 'mastered')}
       />
 

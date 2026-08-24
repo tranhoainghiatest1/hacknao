@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, PlusCircle, Edit3, Save } from 'lucide-react';
+import { X, PlusCircle, Edit3, Save, Loader2 } from 'lucide-react';
 
 export function VocabFormModal({ isOpen, initialData, onClose, onSave }) {
   const [formData, setFormData] = useState({
@@ -58,12 +58,25 @@ export function VocabFormModal({ isOpen, initialData, onClose, onSave }) {
     }
   }, [initialData, isOpen]);
 
+  // ESC key to close
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape' && !submitting) {
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, submitting, onClose]);
+
   if (!isOpen) return null;
 
   const isEditing = Boolean(initialData?.id);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (submitting) return;
     setSubmitting(true);
     await onSave({
       ...formData,
@@ -79,19 +92,19 @@ export function VocabFormModal({ isOpen, initialData, onClose, onSave }) {
   };
 
   return (
-    <div className="modal-overlay" onClick={onClose}>
+    <div className="modal-overlay" onClick={onClose} role="dialog" aria-modal="true">
       <div className="modal-card modal-lg" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
           <h2 className="modal-title">
             {isEditing ? <Edit3 size={20} /> : <PlusCircle size={20} />}
             {isEditing ? 'Chỉnh Sửa Từ Vựng' : 'Thêm Từ Vựng Mới'}
           </h2>
-          <button className="modal-close-btn" onClick={onClose}>
+          <button className="modal-close-btn" onClick={onClose} aria-label="Đóng cửa sổ">
             <X size={20} />
           </button>
         </div>
 
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} aria-busy={submitting}>
           <div className="modal-body">
             <div className="form-grid">
               {/* Word */}
@@ -264,12 +277,12 @@ export function VocabFormModal({ isOpen, initialData, onClose, onSave }) {
           </div>
 
           <div className="modal-footer">
-            <button type="button" className="btn btn-ghost" onClick={onClose}>
-              Hủy
+            <button type="button" className="btn btn-ghost" onClick={onClose} disabled={submitting}>
+              Hủy (Esc)
             </button>
             <button type="submit" className="btn btn-primary" disabled={submitting}>
-              <Save size={16} />
-              {submitting ? 'Đang lưu...' : (isEditing ? 'Lưu Cập Nhật' : 'Thêm Mới')}
+              {submitting ? <Loader2 size={16} className="spinner" style={{ width: 16, height: 16, margin: 0 }} /> : <Save size={16} />}
+              {submitting ? 'Đang lưu vào MySQL...' : (isEditing ? 'Lưu Cập Nhật' : 'Thêm Mới')}
             </button>
           </div>
         </form>
