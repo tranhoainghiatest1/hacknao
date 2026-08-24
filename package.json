@@ -1,0 +1,22 @@
+{
+  "name": "hacknao-1500-crud",
+  "version": "1.0.0",
+  "description": "Hệ thống Quản lý & Học Từ Vựng Hack Não 1500 Tiếng Anh - CRUD & Search kết nối MySQL (XAMPP)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "db:init": "node scripts/init-db.js",
+    "db:seed": "node scripts/seed-db.js"
+  },
+  "keywords": ["hacknao", "crud", "mysql", "xampp", "vocabulary", "english"],
+  "author": "Antigravity",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "multer": "^1.4.5-lts.1",
+    "mysql2": "^3.12.0"
+  }
+}
