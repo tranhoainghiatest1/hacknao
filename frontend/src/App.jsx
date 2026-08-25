@@ -25,6 +25,7 @@ export default function App() {
   const [pagination, setPagination] = useState({ total: 0, page: 1, limit: 12, totalPages: 1 });
   const [stats, setStats] = useState(null);
   const [filterOptions, setFilterOptions] = useState({ units: [], categories: [] });
+  const [searchQuery, setSearchQuery] = useState('');
   const [filters, setFilters] = useState({
     q: '',
     unit: 'all',
@@ -36,7 +37,8 @@ export default function App() {
   });
   const [viewMode, setViewMode] = useState(localStorage.getItem('hacknao_view_mode') || 'grid');
   const [theme, setTheme] = useState(localStorage.getItem('hacknao_theme') || 'dark');
-  const [loading, setLoading] = useState(true);
+  const [isInitialLoading, setIsInitialLoading] = useState(true);
+  const [isFetching, setIsFetching] = useState(false);
   const [dbConnected, setDbConnected] = useState(true);
   const [toasts, setToasts] = useState([]);
 
@@ -82,9 +84,22 @@ export default function App() {
     localStorage.setItem('hacknao_view_mode', viewMode);
   }, [viewMode]);
 
+  // Debounce Search Query (Tránh nháy màn hình và spam request)
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setFilters((prev) => {
+        if (prev.q === searchQuery) return prev;
+        return { ...prev, q: searchQuery };
+      });
+      setPagination((prev) => ({ ...prev, page: 1 }));
+    }, 280);
+
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
+
   // Fetch Vocabularies
   const fetchVocabularies = useCallback(async () => {
-    setLoading(true);
+    setIsFetching(true);
     try {
       const params = new URLSearchParams({
         q: filters.q,
@@ -112,7 +127,8 @@ export default function App() {
       console.error('Fetch error:', err);
       setDbConnected(false);
     } finally {
-      setLoading(false);
+      setIsFetching(false);
+      setIsInitialLoading(false);
     }
   }, [filters, pagination.page, pagination.limit, showToast]);
 
@@ -162,6 +178,7 @@ export default function App() {
   };
 
   const handleResetFilters = () => {
+    setSearchQuery('');
     setFilters({
       q: '',
       unit: 'all',
@@ -175,7 +192,11 @@ export default function App() {
   };
 
   const handleRemoveActiveFilter = (key) => {
-    handleFilterChange(key, key === 'q' ? '' : 'all');
+    if (key === 'q') {
+      setSearchQuery('');
+    } else {
+      handleFilterChange(key, 'all');
+    }
   };
 
   // CRUD Actions
@@ -305,9 +326,9 @@ export default function App() {
 
       {/* App Navbar */}
       <Navbar
-        searchQuery={filters.q}
-        onSearchChange={(q) => handleFilterChange('q', q)}
-        onClearSearch={() => handleFilterChange('q', '')}
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
+        onClearSearch={() => setSearchQuery('')}
         theme={theme}
         onToggleTheme={() => setTheme((t) => (t === 'dark' ? 'light' : 'dark'))}
         onOpenCreate={() => { setEditingItem(null); setFormModalOpen(true); }}
@@ -344,10 +365,10 @@ export default function App() {
         />
 
         {/* Data Results Section */}
-        {loading ? (
+        {isInitialLoading && items.length === 0 ? (
           <div className="state-container">
             <div className="spinner" />
-            <p>Đang tải dữ liệu từ vựng React 19...</p>
+            <p>Đang tải dữ liệu từ vựng Hack Não 1500...</p>
           </div>
         ) : items.length === 0 ? (
           <div className="state-container">
@@ -359,7 +380,7 @@ export default function App() {
             </button>
           </div>
         ) : (
-          <>
+          <div style={{ opacity: isFetching ? 0.65 : 1, transition: 'opacity 0.2s ease-in-out' }}>
             {viewMode === 'grid' ? (
               <div className="vocab-grid">
                 {items.map((item) => (
@@ -391,7 +412,7 @@ export default function App() {
               onPageChange={(page) => setPagination((prev) => ({ ...prev, page }))}
               onLimitChange={(limit) => setPagination((prev) => ({ ...prev, limit, page: 1 }))}
             />
-          </>
+          </div>
         )}
       </main>
 

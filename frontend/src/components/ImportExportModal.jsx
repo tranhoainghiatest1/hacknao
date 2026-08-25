@@ -7,14 +7,18 @@ export function ImportExportModal({ isOpen, onClose, onImportSubmit }) {
   const [submitting, setSubmitting] = useState(false);
   const fileInputRef = useRef(null);
 
-  // ESC shortcut
+  // ESC shortcut & Lock Body Scroll
   useEffect(() => {
     if (!isOpen) return;
+    document.body.style.overflow = 'hidden';
     const handleKeyDown = (e) => {
       if (e.key === 'Escape' && !submitting) onClose();
     };
     window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    return () => {
+      document.body.style.overflow = '';
+      window.removeEventListener('keydown', handleKeyDown);
+    };
   }, [isOpen, submitting, onClose]);
 
   if (!isOpen) return null;

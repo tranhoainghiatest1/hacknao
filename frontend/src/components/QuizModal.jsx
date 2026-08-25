@@ -54,9 +54,10 @@ export function QuizModal({ isOpen, items, onClose, onSpeak }) {
     }
   }, [currentIndex, quizPool, loadQuestion]);
 
-  // Keyboard Shortcuts: ESC, 1, 2, 3, 4, Enter
+  // Keyboard Shortcuts: ESC, 1, 2, 3, 4, Enter & Lock Body Scroll
   useEffect(() => {
     if (!isOpen) return;
+    document.body.style.overflow = 'hidden';
 
     const handleKeyDown = (e) => {
       if (e.key === 'Escape') {
@@ -70,7 +71,10 @@ export function QuizModal({ isOpen, items, onClose, onSpeak }) {
     };
 
     window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    return () => {
+      document.body.style.overflow = '';
+      window.removeEventListener('keydown', handleKeyDown);
+    };
   }, [isOpen, onClose, selectedOption, options, handleSelectOption, handleNext]);
 
   if (!isOpen) return null;

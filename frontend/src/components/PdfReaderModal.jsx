@@ -164,14 +164,18 @@ export function PdfReaderModal({ isOpen, pageNumber = 14, onClose }) {
     setCurrentPage(pageNumber);
   }, [pageNumber, isOpen]);
 
-  // ESC shortcut
+  // ESC shortcut & Lock Body Scroll
   useEffect(() => {
     if (!isOpen) return;
+    document.body.style.overflow = 'hidden';
     const handleKeyDown = (e) => {
       if (e.key === 'Escape') onClose();
     };
     window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    return () => {
+      document.body.style.overflow = '';
+      window.removeEventListener('keydown', handleKeyDown);
+    };
   }, [isOpen, onClose]);
 
   if (!isOpen) return null;

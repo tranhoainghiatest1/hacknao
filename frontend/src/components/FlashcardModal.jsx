@@ -30,27 +30,28 @@ export function FlashcardModal({ isOpen, items, onClose, onSpeak, speakingWord, 
     handleNext();
   };
 
-  // Keyboard navigation & ESC
+  // Keyboard navigation, ESC & Lock Body Scroll
   useEffect(() => {
     if (!isOpen) return;
+    document.body.style.overflow = 'hidden';
 
     const handleKeyDown = (e) => {
       if (e.key === 'Escape') {
         onClose();
       } else if (e.key === 'ArrowLeft') {
-        e.preventDefault();
         handlePrev();
       } else if (e.key === 'ArrowRight') {
-        e.preventDefault();
         handleNext();
-      } else if (e.key === ' ' || e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+      } else if (e.key === ' ' || e.key === 'Enter') {
         e.preventDefault();
         setFlipped((f) => !f);
       }
     };
-
     window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    return () => {
+      document.body.style.overflow = '';
+      window.removeEventListener('keydown', handleKeyDown);
+    };
   }, [isOpen, index, items, onClose]);
 
   if (!isOpen || !items || items.length === 0) return null;

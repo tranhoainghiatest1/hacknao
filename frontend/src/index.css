@@ -965,15 +965,16 @@ body {
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.7);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 20px;
   z-index: 1000;
   animation: fadeIn 0.2s ease;
+  overscroll-behavior: contain;
 }
 .modal-card {
   background: var(--bg-secondary);
@@ -981,11 +982,19 @@ body {
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-lg);
   width: 100%;
-  max-height: 90vh;
+  max-height: calc(100vh - 40px);
   display: flex;
   flex-direction: column;
   overflow: hidden;
   animation: modalScale 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  overscroll-behavior: contain;
+}
+.modal-card form {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
 }
 .modal-sm { max-width: 440px; }
 .modal-md { max-width: 600px; }
@@ -996,6 +1005,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-shrink: 0;
 }
 .modal-title {
   font-size: 1.15rem;
@@ -1022,7 +1032,9 @@ body {
 .modal-body {
   padding: 24px;
   overflow-y: auto;
-  flex-grow: 1;
+  flex: 1;
+  min-height: 0;
+  overscroll-behavior: contain;
 }
 .modal-footer {
   padding: 16px 24px;
@@ -1031,6 +1043,7 @@ body {
   align-items: center;
   justify-content: space-between;
   background: var(--bg-surface-elevated);
+  flex-shrink: 0;
 }
 .modal-footer-right {
   display: flex;

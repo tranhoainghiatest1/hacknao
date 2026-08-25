@@ -26,16 +26,20 @@ export function DetailModal({
   onOpenPdf,
   onCopy
 }) {
-  // ESC key to close modal (Impeccable Keyboard Standard)
+  // ESC key to close modal & Lock Body Scroll
   useEffect(() => {
     if (!item) return;
+    document.body.style.overflow = 'hidden';
     const handleKeyDown = (e) => {
       if (e.key === 'Escape') {
         onClose();
       }
     };
     window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    return () => {
+      document.body.style.overflow = '';
+      window.removeEventListener('keydown', handleKeyDown);
+    };
   }, [item, onClose]);
 
   if (!item) return null;

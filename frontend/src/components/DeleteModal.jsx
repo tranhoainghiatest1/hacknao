@@ -6,13 +6,17 @@ export function DeleteModal({ item, onClose, onConfirm }) {
 
   useEffect(() => {
     if (!item) return;
+    document.body.style.overflow = 'hidden';
     const handleKeyDown = (e) => {
       if (e.key === 'Escape' && !deleting) {
         onClose();
       }
     };
     window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    return () => {
+      document.body.style.overflow = '';
+      window.removeEventListener('keydown', handleKeyDown);
+    };
   }, [item, deleting, onClose]);
 
   if (!item) return null;

@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { X, PlusCircle, Edit3, Save, Loader2 } from 'lucide-react';
 
 export function VocabFormModal({ isOpen, initialData, onClose, onSave }) {
+  const firstInputRef = useRef(null);
   const [formData, setFormData] = useState({
     word: '',
     phonetic: '',
@@ -58,16 +59,27 @@ export function VocabFormModal({ isOpen, initialData, onClose, onSave }) {
     }
   }, [initialData, isOpen]);
 
-  // ESC key to close
+  // Khóa cuộn trang nền và auto-focus vào ô đầu tiên khi mở modal
   useEffect(() => {
     if (!isOpen) return;
+
+    document.body.style.overflow = 'hidden';
+    const focusTimer = setTimeout(() => {
+      firstInputRef.current?.focus();
+    }, 60);
+
     const handleKeyDown = (e) => {
       if (e.key === 'Escape' && !submitting) {
         onClose();
       }
     };
     window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+
+    return () => {
+      clearTimeout(focusTimer);
+      document.body.style.overflow = '';
+      window.removeEventListener('keydown', handleKeyDown);
+    };
   }, [isOpen, submitting, onClose]);
 
   if (!isOpen) return null;
@@ -111,6 +123,7 @@ export function VocabFormModal({ isOpen, initialData, onClose, onSave }) {
               <div className="form-group col-6">
                 <label>Từ Vựng Tiếng Anh <span className="text-danger">*</span></label>
                 <input
+                  ref={firstInputRef}
                   type="text"
                   required
                   placeholder="Ví dụ: Additional, Persuade, Issue..."
