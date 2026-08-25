@@ -27,13 +27,9 @@ export const getVocabularies = async (req, res) => {
         const searchTerm = `%${q.trim()}%`;
         whereConditions.push(`(
           word LIKE ? OR 
-          meaning_vi LIKE ? OR 
-          sound_bridge LIKE ? OR 
-          definition_en LIKE ? OR 
-          example_en LIKE ? OR
-          phonetic LIKE ?
+          meaning_vi LIKE ?
         )`);
-        params.push(searchTerm, searchTerm, searchTerm, searchTerm, searchTerm, searchTerm);
+        params.push(searchTerm, searchTerm);
       }
 
       if (unit && unit !== 'all') {
@@ -91,10 +87,7 @@ export const getVocabularies = async (req, res) => {
       const term = q.trim().toLowerCase();
       list = list.filter(item => 
         (item.word && item.word.toLowerCase().includes(term)) ||
-        (item.meaning_vi && item.meaning_vi.toLowerCase().includes(term)) ||
-        (item.sound_bridge && item.sound_bridge.toLowerCase().includes(term)) ||
-        (item.definition_en && item.definition_en.toLowerCase().includes(term)) ||
-        (item.phonetic && item.phonetic.toLowerCase().includes(term))
+        (item.meaning_vi && item.meaning_vi.toLowerCase().includes(term))
       );
     }
 

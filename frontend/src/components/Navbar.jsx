@@ -82,7 +82,7 @@ export function Navbar({
             <input
               ref={searchInputRef}
               type="text"
-              placeholder="Tìm từ, nghĩa, âm thanh tương tự... (Ctrl + K)"
+              placeholder="Tìm từ vựng tiếng Anh, nghĩa của từ... (Ctrl + K)"
               value={searchQuery}
               onChange={(e) => onSearchChange(e.target.value)}
             />
