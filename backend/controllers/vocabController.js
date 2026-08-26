@@ -452,7 +452,7 @@ export const getFilterOptions = async (req, res) => {
 
     if (pool) {
       const [units] = await pool.query('SELECT DISTINCT unit, unit_title FROM vocabularies ORDER BY unit ASC');
-      const [categories] = await pool.query('SELECT DISTINCT category FROM vocabularies WHERE category IS NOT NULL AND category != "" ORDER BY category ASC');
+      const [categories] = await pool.query("SELECT DISTINCT category FROM vocabularies WHERE category IS NOT NULL AND category != '' ORDER BY category ASC");
 
       return res.json({
         success: true,
