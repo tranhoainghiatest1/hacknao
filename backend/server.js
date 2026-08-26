@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import path from 'path';
+import fs from 'fs';
 import dotenv from 'dotenv';
 import { fileURLToPath } from 'url';
 import { initDatabase, getStatus } from './config/db.js';
@@ -31,6 +32,22 @@ app.get('/api/health', (req, res) => {
     timestamp: new Date().toISOString(),
     database: getStatus()
   });
+});
+
+// Serve frontend dist when deployed (Production Single Service)
+const frontendDist = path.join(__dirname, '../frontend/dist');
+app.use(express.static(frontendDist));
+
+app.get('*', (req, res, next) => {
+  if (req.path.startsWith('/api') || req.path.startsWith('/pages')) {
+    return next();
+  }
+  const indexPath = path.join(frontendDist, 'index.html');
+  if (fs.existsSync(indexPath)) {
+    res.sendFile(indexPath);
+  } else {
+    res.status(404).send('Backend API is running. Build frontend with `npm run build` to view the UI.');
+  }
 });
 
 app.listen(PORT, async () => {

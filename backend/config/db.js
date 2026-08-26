@@ -18,7 +18,10 @@ export const DB_CONFIG = {
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,
-  charset: 'utf8mb4'
+  charset: 'utf8mb4',
+  ssl: (process.env.DB_SSL === 'true' || (process.env.DB_HOST && process.env.DB_HOST.includes('aivencloud.com'))) 
+    ? { rejectUnauthorized: false } 
+    : undefined
 };
 
 let pool = null;
@@ -46,22 +49,31 @@ loadMemoryData();
 
 export async function initDatabase() {
   try {
-    const serverConnection = await mysql.createConnection({
-      host: DB_CONFIG.host,
-      port: DB_CONFIG.port,
-      user: DB_CONFIG.user,
-      password: DB_CONFIG.password
-    });
+    const isLocal = DB_CONFIG.host === 'localhost' || DB_CONFIG.host === '127.0.0.1';
 
-    console.log(`[MySQL] Đang kết nối tới MySQL Server (${DB_CONFIG.host}:${DB_CONFIG.port})...`);
+    if (isLocal) {
+      try {
+        const serverConnection = await mysql.createConnection({
+          host: DB_CONFIG.host,
+          port: DB_CONFIG.port,
+          user: DB_CONFIG.user,
+          password: DB_CONFIG.password
+        });
 
-    await serverConnection.query(
-      `CREATE DATABASE IF NOT EXISTS \`${DB_CONFIG.database}\` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;`
-    );
-    console.log(`[MySQL] Database "${DB_CONFIG.database}" đã sẵn sàng.`);
-    await serverConnection.end();
+        console.log(`[MySQL] Đang kết nối tới MySQL Server (${DB_CONFIG.host}:${DB_CONFIG.port})...`);
+
+        await serverConnection.query(
+          `CREATE DATABASE IF NOT EXISTS \`${DB_CONFIG.database}\` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;`
+        );
+        console.log(`[MySQL] Database "${DB_CONFIG.database}" đã sẵn sàng.`);
+        await serverConnection.end();
+      } catch (e) {
+        console.log('[MySQL Local Notice]:', e.message);
+      }
+    }
 
     pool = mysql.createPool(DB_CONFIG);
+    console.log(`[MySQL] Đang kết nối tới database "${DB_CONFIG.database}" trên ${DB_CONFIG.host}:${DB_CONFIG.port}...`);
 
     const createTableQuery = `
       CREATE TABLE IF NOT EXISTS \`vocabularies\` (

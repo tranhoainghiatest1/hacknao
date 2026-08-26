@@ -44,8 +44,12 @@ export function VocabCard({
         )}
 
         {item.example_en && (
-          <div className="card-example-row">
-            "{item.example_en}"
+          <div className="card-example-row" style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+            {item.example_en.split('\n').filter(Boolean).map((ex, idx) => (
+              <div key={idx} style={{ fontStyle: 'italic', fontSize: '0.8rem', lineHeight: 1.4 }}>
+                • "{ex}"
+              </div>
+            ))}
           </div>
         )}
       </div>

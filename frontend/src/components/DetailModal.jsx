@@ -128,25 +128,38 @@ export function DetailModal({
             {/* Cột Phải */}
             <div>
               <div className="section-badge">
-                <Quote size={13} /> CÂU VÍ DỤ MINH HỌA
+                <Quote size={13} /> CÂU VÍ DỤ MINH HỌA ({((item.example_en || '').split('\n').filter(Boolean).length) || 1} câu)
               </div>
-              <div className="example-box">
-                <div className="example-en-line">
-                  <ChevronRight size={15} />
-                  <span>{item.example_en || 'No example sentence.'}</span>
-                  {item.example_en && (
-                    <button 
-                      className={`btn-speak-sm ${isSpeakingExample ? 'btn-speaking' : ''}`}
-                      onClick={() => onSpeak(item.example_en)}
-                      title="Phát âm câu ví dụ"
-                      aria-label="Phát âm câu ví dụ"
-                    >
-                      <Volume2 size={13} />
-                    </button>
-                  )}
-                </div>
-                <div className="example-vi-line">{item.example_vi}</div>
-              </div>
+              {(() => {
+                const ens = (item.example_en || '').split('\n').map(s => s.trim()).filter(Boolean);
+                const vis = (item.example_vi || '').split('\n').map(s => s.trim()).filter(Boolean);
+                if (ens.length === 0) {
+                  return (
+                    <div className="example-box">
+                      <div className="example-en-line">
+                        <span>No example sentence.</span>
+                      </div>
+                    </div>
+                  );
+                }
+                return ens.map((enSentence, idx) => (
+                  <div className="example-box" key={idx} style={{ marginBottom: idx < ens.length - 1 ? 10 : 0 }}>
+                    <div className="example-en-line">
+                      <ChevronRight size={15} />
+                      <span>{enSentence}</span>
+                      <button 
+                        className={`btn-speak-sm ${speakingWord === enSentence ? 'btn-speaking' : ''}`}
+                        onClick={() => onSpeak(enSentence)}
+                        title="Phát âm câu ví dụ này"
+                        aria-label="Phát âm câu ví dụ"
+                      >
+                        <Volume2 size={13} />
+                      </button>
+                    </div>
+                    {vis[idx] && <div className="example-vi-line">{vis[idx]}</div>}
+                  </div>
+                ));
+              })()}
 
               <div className="section-badge mt-3">
                 <FileText size={13} /> THÔNG TIN TRANG SÁCH & GHI CHÚ
