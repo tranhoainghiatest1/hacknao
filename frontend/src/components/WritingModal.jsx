@@ -412,8 +412,13 @@ export function WritingModal({ isOpen, unitsList = [], currentUnit, onClose, onS
                   {status === 'correct' && (
                     <div className="writing-feedback correct animate-fadeIn">
                       <CheckCircle2 size={22} />
-                      <div>
-                        <strong>Chính xác 100%!</strong>
+                      <div style={{ flex: 1 }}>
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 6 }}>
+                          <strong>Chính xác 100%!</strong>
+                          <span className="badge badge-unit">
+                            Unit {current.unit}{current.page_number ? ` • Trang ${current.page_number}` : ''}
+                          </span>
+                        </div>
                         <div style={{ fontSize: '0.9rem', marginTop: 2 }}>
                           <strong>{current.word}</strong> <span className="font-mono text-muted">({current.phonetic})</span>: {current.meaning_vi}
                         </div>
@@ -437,13 +442,16 @@ export function WritingModal({ isOpen, unitsList = [], currentUnit, onClose, onS
                     <div className="writing-feedback revealed animate-fadeIn">
                       <HelpCircle size={22} />
                       <div style={{ width: '100%' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 6 }}>
                           <div>
                             <strong>Đáp án mẫu: </strong> 
                             <span style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--primary)', marginLeft: 4 }}>
                               {current.word}
                             </span>
                             <span className="font-mono text-muted" style={{ marginLeft: 6 }}>({current.phonetic})</span>
+                            <span className="badge badge-unit" style={{ marginLeft: 8 }}>
+                              Unit {current.unit}{current.page_number ? ` • Trang ${current.page_number}` : ''}
+                            </span>
                           </div>
                           <button 
                             type="button" 
@@ -509,10 +517,13 @@ export function WritingModal({ isOpen, unitsList = [], currentUnit, onClose, onS
                 <div className="results-list">
                   {resultsHistory.map((res, i) => (
                     <div key={i} className={`result-row ${res.isCorrect ? 'correct' : 'wrong'}`}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
                         {res.isCorrect ? <CheckCircle2 size={16} className="text-success" /> : <XCircle size={16} className="text-danger" />}
                         <strong>{res.item.word}</strong>
                         <span className="text-muted" style={{ fontSize: '0.85rem' }}>- {res.item.meaning_vi}</span>
+                        <span className="badge badge-unit" style={{ fontSize: '0.72rem', padding: '1px 6px' }}>
+                          Unit {res.item.unit}{res.item.page_number ? ` • Trang ${res.item.page_number}` : ''}
+                        </span>
                       </div>
                       <button 
                         className="btn-icon-sm"

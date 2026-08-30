@@ -321,20 +321,47 @@ export function QuizModal({ isOpen, unitsList = [], currentUnit, onClose, onSpea
                     >
                       <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                         <span className="opt-index-badge">{idx + 1}</span>
-                        <div>
+                        <div style={{ flex: 1 }}>
                           {quizMode === 'vi_en' && (
                             <>
-                              <strong style={{ fontSize: '1.05rem', color: 'var(--text-primary)' }}>{opt.word}</strong>
-                              <span className="font-mono text-muted" style={{ marginLeft: 6, fontSize: '0.82rem' }}>
-                                ({opt.phonetic})
-                              </span>
+                              <div>
+                                <strong style={{ fontSize: '1.05rem', color: 'var(--text-primary)' }}>{opt.word}</strong>
+                                <span className="font-mono text-muted" style={{ marginLeft: 6, fontSize: '0.82rem' }}>
+                                  ({opt.phonetic})
+                                </span>
+                              </div>
+                              {/* Khi chọn đáp án (dù đúng hay sai) -> Hiện nghĩa, Unit và Trang PDF */}
+                              {selectedOption && (
+                                <div className="opt-revealed-meaning animate-fadeIn">
+                                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 6 }}>
+                                    <span>{opt.id === current.id ? '✅ ' : '• '}{opt.meaning_vi}</span>
+                                    <span className="opt-meta-tag">
+                                      Unit {opt.unit}{opt.page_number ? ` • Trang ${opt.page_number}` : ''}
+                                    </span>
+                                  </div>
+                                </div>
+                              )}
                             </>
                           )}
 
                           {quizMode === 'en_vi' && (
-                            <span style={{ fontSize: '1rem', fontWeight: 600, color: 'var(--text-primary)' }}>
-                              {opt.meaning_vi}
-                            </span>
+                            <>
+                              <div style={{ fontSize: '1rem', fontWeight: 600, color: 'var(--text-primary)' }}>
+                                {opt.meaning_vi}
+                              </div>
+                              {selectedOption && (
+                                <div className="opt-revealed-meaning animate-fadeIn">
+                                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 6 }}>
+                                    <span className="font-mono text-muted" style={{ fontSize: '0.82rem' }}>
+                                      {opt.word} ({opt.phonetic})
+                                    </span>
+                                    <span className="opt-meta-tag">
+                                      Unit {opt.unit}{opt.page_number ? ` • Trang ${opt.page_number}` : ''}
+                                    </span>
+                                  </div>
+                                </div>
+                              )}
+                            </>
                           )}
                         </div>
                       </div>
@@ -360,14 +387,20 @@ export function QuizModal({ isOpen, unitsList = [], currentUnit, onClose, onSpea
               {selectedOption && (
                 <div className={`quiz-feedback ${selectedOption.id === current.id ? 'correct' : 'wrong'} animate-fadeIn`}>
                   {selectedOption.id === current.id ? (
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, flexWrap: 'wrap' }}>
                       <CheckCircle2 size={20} />
                       <span>Chính xác! (+10 điểm) • <strong>{current.word}</strong>: {current.meaning_vi}</span>
+                      <span className="badge badge-unit" style={{ marginLeft: 6 }}>
+                        Unit {current.unit}{current.page_number ? ` • Trang ${current.page_number}` : ''}
+                      </span>
                     </div>
                   ) : (
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, flexWrap: 'wrap' }}>
                       <XCircle size={20} />
                       <span>Chưa đúng! Đáp án đúng: <strong>{current.word}</strong> <span className="font-mono">({current.phonetic})</span>: {current.meaning_vi}</span>
+                      <span className="badge badge-unit" style={{ marginLeft: 6 }}>
+                        Unit {current.unit}{current.page_number ? ` • Trang ${current.page_number}` : ''}
+                      </span>
                     </div>
                   )}
                 </div>
@@ -395,11 +428,14 @@ export function QuizModal({ isOpen, unitsList = [], currentUnit, onClose, onSpea
                 <div className="history-list">
                   {history.map((h, i) => (
                     <div key={i} className={`history-item ${h.isCorrect ? 'correct' : 'wrong'}`}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
                         {h.isCorrect ? <CheckCircle2 size={16} className="text-success" /> : <XCircle size={16} className="text-danger" />}
                         <strong>{h.item.word}</strong>
                         <span className="text-muted">({h.item.phonetic})</span>
                         <span>- {h.item.meaning_vi}</span>
+                        <span className="badge badge-unit" style={{ fontSize: '0.72rem', padding: '1px 6px' }}>
+                          Unit {h.item.unit}{h.item.page_number ? ` • Trang ${h.item.page_number}` : ''}
+                        </span>
                       </div>
                       <button className="btn-icon-sm" onClick={() => onSpeak(h.item.word)} title="Nghe phát âm">
                         <Volume2 size={16} />
