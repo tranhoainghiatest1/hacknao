@@ -12,6 +12,7 @@ import {
   DeleteModal, 
   FlashcardModal, 
   QuizModal, 
+  WritingModal,
   PdfReaderModal, 
   ImportExportModal, 
   ToastContainer 
@@ -49,6 +50,7 @@ export default function App() {
   const [deleteItem, setDeleteItem] = useState(null);
   const [flashcardOpen, setFlashcardOpen] = useState(false);
   const [quizOpen, setQuizOpen] = useState(false);
+  const [writingOpen, setWritingOpen] = useState(false);
   const [pdfModalOpen, setPdfModalOpen] = useState(false);
   const [pdfTargetPage, setPdfTargetPage] = useState(14);
   const [importModalOpen, setImportModalOpen] = useState(false);
@@ -334,6 +336,7 @@ export default function App() {
         onOpenCreate={() => { setEditingItem(null); setFormModalOpen(true); }}
         onOpenFlashcard={() => setFlashcardOpen(true)}
         onOpenQuiz={() => setQuizOpen(true)}
+        onOpenWriting={() => setWritingOpen(true)}
         onOpenPdf={() => { setPdfTargetPage(14); setPdfModalOpen(true); }}
         onExportJson={handleExportJson}
         onOpenImport={() => setImportModalOpen(true)}
@@ -453,8 +456,17 @@ export default function App() {
 
       <QuizModal
         isOpen={quizOpen}
-        items={items}
+        unitsList={filterOptions.units}
+        currentUnit={filters.unit}
         onClose={() => setQuizOpen(false)}
+        onSpeak={speak}
+      />
+
+      <WritingModal
+        isOpen={writingOpen}
+        unitsList={filterOptions.units}
+        currentUnit={filters.unit}
+        onClose={() => setWritingOpen(false)}
         onSpeak={speak}
       />
 

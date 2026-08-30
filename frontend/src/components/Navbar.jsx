@@ -5,6 +5,7 @@ import {
   X, 
   Layers, 
   HelpCircle, 
+  PenTool,
   BookOpen, 
   Plus, 
   MoreVertical, 
@@ -24,6 +25,7 @@ export function Navbar({
   onOpenCreate,
   onOpenFlashcard,
   onOpenQuiz,
+  onOpenWriting,
   onOpenPdf,
   onExportJson,
   onOpenImport,
@@ -101,9 +103,14 @@ export function Navbar({
             <span>Flashcard</span>
           </button>
 
-          <button className="btn btn-outline" onClick={onOpenQuiz} title="Trắc nghiệm ôn tập">
+          <button className="btn btn-outline" onClick={onOpenQuiz} title="Trắc nghiệm ôn tập (3 Chế độ)">
             <HelpCircle size={16} />
             <span>Trắc nghiệm</span>
+          </button>
+
+          <button className="btn btn-outline" onClick={onOpenWriting} title="Luyện viết & Chính tả tiếng Anh">
+            <PenTool size={16} />
+            <span>Luyện viết</span>
           </button>
 
           <button className="btn btn-outline" onClick={onOpenPdf} title="Xem sách PDF gốc">

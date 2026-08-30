@@ -12,4 +12,5 @@ export { FlashcardModal } from './FlashcardModal.jsx';
 export { QuizModal } from './QuizModal.jsx';
 export { PdfReaderModal } from './PdfReaderModal.jsx';
 export { ImportExportModal } from './ImportExportModal.jsx';
+export { WritingModal } from './WritingModal.jsx';
 export { ToastContainer } from './ToastContainer.jsx';

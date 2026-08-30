@@ -16,7 +16,7 @@ export const getVocabularies = async (req, res) => {
     } = req.query;
 
     page = Math.max(1, parseInt(page, 10) || 1);
-    limit = Math.min(100, Math.max(1, parseInt(limit, 10) || 12));
+    limit = Math.min(2000, Math.max(1, parseInt(limit, 10) || 12));
     const offset = (page - 1) * limit;
 
     if (pool) {
